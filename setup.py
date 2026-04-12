@@ -22,5 +22,5 @@ author = 'Atharva Sawant',
 author_email="atharvasawant3183@example.com",
 packages = find_packages(),
 install_requires = get_requirements('requirements.txt'),
-description = 'This is a machine learning project'
+description = 'This is a Smart Property Advisor a machine learning project'
 )
