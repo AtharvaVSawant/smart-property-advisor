@@ -10,6 +10,9 @@ from dataclasses import dataclass   # use to creatclass variable
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformationConfig
 
+from src.components.model_trainer import ModelTrainerConfig
+from src.components.model_trainer import ModelTrainer
+
 
 @dataclass   # Decorator  why - because inside a class to define the class variable we use init but by using this we can directly define the data classes 
 class DataIngestionConfig:
@@ -50,7 +53,12 @@ class DataIngestion:
         
 if __name__=="__main__":
     obj=DataIngestion()
-    train_data,test_data = obj.intiate_data_ingestion()
-    
-    data_transformation = DataTransformation()
-    data_transformation.initiate_data_transformation(train_data,test_data)
+    train_data,test_data=obj.intiate_data_ingestion()
+
+    data_transformation=DataTransformation()
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+
+    modeltrainer=ModelTrainer()
+    print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
+
+ 
