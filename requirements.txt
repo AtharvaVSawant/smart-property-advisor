@@ -3,5 +3,6 @@ seaborn
 numpy
 matplotlib
 dill
+flask
 
 # -e .
