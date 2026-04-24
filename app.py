@@ -426,6 +426,8 @@ else:  # About
     ### 📧 Contact
     
     For questions or feedback, please reach out to our support team.
+    Email : atharvasawant3183@gmail.com
+    Contact : +91 9653320569
     """)
     
     st.markdown("---")
