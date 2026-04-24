@@ -3,7 +3,6 @@ seaborn
 numpy
 matplotlib
 dill
-flask
 streamlit
 
 # -e .
