@@ -1,13 +1,12 @@
 import streamlit as st
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
-import pandas as pd
 from streamlit_option_menu import option_menu
 import traceback
 
 # -------------------------------
 # CONFIG
 # -------------------------------
-DEBUG = False
+DEBUG = False  # 🔁 Set True only for debugging
 
 st.set_page_config(
     page_title="Smart Property Advisor",
@@ -44,7 +43,7 @@ with st.sidebar:
     selected = option_menu(
         None,
         ["Predictor", "Insights", "About"],
-        icons=["house", "info-circle", "person"],
+        icons=["house", "bar-chart", "person"],
         default_index=0
     )
 
@@ -78,7 +77,9 @@ if selected == "Predictor":
         st.session_state.B = st.number_input("Population Diversity Index", value=st.session_state.B)
         st.session_state.LSTAT = st.slider("Lower Income Population (%)", 0.0, 40.0, st.session_state.LSTAT)
 
-    # Buttons
+    # -------------------------------
+    # BUTTONS
+    # -------------------------------
     c1, c2 = st.columns(2)
 
     if c1.button("🧹 Clear All"):
@@ -89,7 +90,9 @@ if selected == "Predictor":
         st.session_state.update(DEFAULTS)
         st.rerun()
 
-    # Prediction
+    # -------------------------------
+    # PREDICTION
+    # -------------------------------
     try:
         pipeline = PredictPipeline()
 
@@ -111,22 +114,26 @@ if selected == "Predictor":
 
         df = data.get_data_as_dataframe()
 
-        df = df.reindex(
-            columns=pipeline.preprocessor.feature_names_in_,
-            fill_value=0
-        )
+        # ✅ SAFE REINDEX FIX (deployment-safe)
+        if hasattr(pipeline.preprocessor, "feature_names_in_"):
+            df = df.reindex(
+                columns=pipeline.preprocessor.feature_names_in_,
+                fill_value=0
+            )
 
         prediction = pipeline.predict(df)[0] * 1000
 
         st.success(f"💰 Estimated Property Price: ${prediction:,.2f}")
 
-    except Exception:
+    except Exception as e:
         st.error("Prediction failed. Please adjust inputs.")
+
         if DEBUG:
+            st.error(str(e))
             st.text(traceback.format_exc())
 
 # -------------------------------
-# INSIGHTS (REPLACEMENT - SIMPLE + STRONG)
+# INSIGHTS
 # -------------------------------
 elif selected == "Insights":
 
@@ -135,29 +142,17 @@ elif selected == "Insights":
     st.markdown("""
     ### 🧠 What drives property prices?
 
-    - **🏠 More Rooms → Higher Price**  
-      Larger houses tend to have higher value.
-
-    - **🚨 Higher Crime Rate → Lower Price**  
-      Safety plays a major role in valuation.
-
-    - **🌫️ Pollution (NOx) → Negative Impact**  
-      Cleaner environments are more desirable.
-
-    - **📉 Lower Income Population (LSTAT) → Lower Price**  
-      Socioeconomic factors influence pricing.
-
-    - **📍 Distance to Jobs → Mixed Effect**  
-      Accessibility vs peaceful locations trade-off.
+    - **🏠 More Rooms → Higher Price**
+    - **🚨 Higher Crime Rate → Lower Price**
+    - **🌫️ Pollution → Negative Impact**
+    - **📉 Lower Income Population → Lower Price**
+    - **📍 Distance to Jobs → Mixed Impact**
 
     ### 🎯 Why this matters
-
-    This model captures real-world relationships between
-    property features and market prices, helping users
-    make data-driven decisions.
+    Helps users make **data-driven real estate decisions**.
     """)
 
-    st.info("💡 These insights are derived from historical housing data patterns.")
+    st.info("💡 Insights based on historical housing dataset patterns.")
 
 # -------------------------------
 # ABOUT
@@ -167,32 +162,27 @@ else:
     st.title("👤 About Me")
 
     st.markdown("""
-    ### 👋 Hi, I'm Atharva Sawant
+    ### 👋 Atharva Sawant
 
-    I am a Machine Learning enthusiast focused on building 
-    real-world, production-ready ML applications.
+    Machine Learning enthusiast building real-world ML systems.
 
-    ### 🚀 About This Project
+    ### 🚀 Project Highlights
     - End-to-end ML pipeline
-    - Data preprocessing + model prediction
-    - Deployed using Streamlit
-    - Designed with user-friendly interface
+    - Model + preprocessing integration
+    - Streamlit deployment
 
-    ### 💼 Skills Demonstrated
-    - Machine Learning (Scikit-learn)
+    ### 💼 Skills
+    - ML (Scikit-learn)
+    - Deployment
     - Data Processing
-    - Model Deployment
-    - UI/UX Design using Streamlit
+    - UI Design
 
-    ### 📬 Contact Me
-    - 📧 Email: atharvasawant3183@gmail.com  
-    - 📱 Phone: +91 9653320569  
-
-    ### 🎯 Goal
-    To build scalable ML solutions that solve real-world problems.
+    ### 📬 Contact
+    - Email: atharvasawant3183@gmail.com
+    - Phone: +91 9653320569
     """)
 
-    st.success("✅ Portfolio-ready ML project")
+    st.success("✅ Portfolio-ready project")
 
 # -------------------------------
 # FOOTER
