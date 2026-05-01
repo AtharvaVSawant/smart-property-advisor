@@ -9,13 +9,27 @@ from src.exception import CustomException
 class PredictPipeline:
     def __init__(self):
         try:
-            self.model_path = os.path.join("artifacts", "model.pkl")
-            self.preprocessor_path = os.path.join("artifacts", "preprocessor.pkl")
+            # ✅ Get absolute base directory
+            base_dir = os.path.dirname(os.path.abspath(__file__))
 
-            # Load once (better performance)
+            # ✅ Build correct paths (deployment safe)
+            self.model_path = os.path.abspath(
+                os.path.join(base_dir, "..", "..", "artifacts", "model.pkl")
+            )
+
+            self.preprocessor_path = os.path.abspath(
+                os.path.join(base_dir, "..", "..", "artifacts", "preprocessor.pkl")
+            )
+
+            # ✅ Debug logs (very helpful in deployment)
+            print(f"Loading model from: {self.model_path}")
+            print(f"Loading preprocessor from: {self.preprocessor_path}")
+
+            # ✅ Load model
             with open(self.model_path, "rb") as f:
                 self.model = pickle.load(f)
 
+            # ✅ Load preprocessor
             with open(self.preprocessor_path, "rb") as f:
                 self.preprocessor = pickle.load(f)
 
@@ -24,8 +38,12 @@ class PredictPipeline:
 
     def predict(self, features: pd.DataFrame):
         try:
+            # ✅ Transform input
             data_scaled = self.preprocessor.transform(features)
+
+            # ✅ Predict
             preds = self.model.predict(data_scaled)
+
             return preds
 
         except Exception as e:
@@ -85,4 +103,3 @@ class CustomData:
 
         except Exception as e:
             raise CustomException(e, sys)
-        
