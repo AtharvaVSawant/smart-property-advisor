@@ -126,7 +126,8 @@ if selected == "Predictor":
         st.success(f"💰 Estimated Property Price: ${prediction:,.2f}")
 
     except Exception as e:
-        st.error("Prediction failed. Please adjust inputs.")
+        st.error("Prediction failed")
+        st.exception(e)
 
         if DEBUG:
             st.error(str(e))
