@@ -7,3 +7,5 @@ streamlit
 plotly
 scikit-learn
 streamlit-option-menu
+xgboost
+catboost
