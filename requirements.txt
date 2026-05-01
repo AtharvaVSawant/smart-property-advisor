@@ -4,5 +4,6 @@ numpy
 matplotlib
 dill
 streamlit
+plotly
 
-# -e .
+streamlit-option-menu
