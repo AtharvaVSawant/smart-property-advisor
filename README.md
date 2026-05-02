@@ -1,5 +1,3 @@
-### Smart Property Advisor 
-
 # 🏠 Smart Property Advisor
 
 A machine learning-powered web application that predicts residential property prices based on key housing and neighborhood features. Built with an end-to-end ML pipeline and deployed via Streamlit.
