@@ -9,6 +9,11 @@ A machine learning-powered web application that predicts residential property pr
 Smart Property Advisor uses a trained regression model on the classic Boston Housing dataset to estimate property prices. Users can interactively adjust feature values through sliders and input fields and get an instant price prediction, making it a practical tool for data-driven real estate decision-making.
 
 ---
+## 🌐 Live Demo
+
+👉 **Try the app here:** https://smart-property-advisor.streamlit.app/
+
+---
 
 ## 🚀 Features
 
