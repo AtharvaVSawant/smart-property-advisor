@@ -1,12 +1,16 @@
 import streamlit as st
+
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
+
 from streamlit_option_menu import option_menu
+
 import traceback
 
 # -------------------------------
 # CONFIG
 # -------------------------------
-DEBUG = False  # 🔁 Set True only for debugging
+
+DEBUG = False  # Set True only for local debugging
 
 st.set_page_config(
     page_title="Smart Property Advisor",
@@ -17,6 +21,7 @@ st.set_page_config(
 # -------------------------------
 # DEFAULT / CLEAR STATES
 # -------------------------------
+
 DEFAULTS = {
     "CRIM": 0.5, "ZN": 10.0, "INDUS": 5.0, "CHAS": 0,
     "NOX": 0.5, "DIS": 3.0, "RM": 6.5, "AGE": 50.0,
@@ -38,6 +43,7 @@ for k, v in DEFAULTS.items():
 # -------------------------------
 # SIDEBAR
 # -------------------------------
+
 with st.sidebar:
     st.title("🏠 Smart Property Advisor")
     selected = option_menu(
@@ -50,6 +56,7 @@ with st.sidebar:
 # -------------------------------
 # PREDICTOR
 # -------------------------------
+
 if selected == "Predictor":
 
     st.title("🏠 Property Price Prediction")
@@ -60,10 +67,8 @@ if selected == "Predictor":
         st.session_state.CRIM = st.slider("Crime Rate (per capita)", 0.0, 10.0, st.session_state.CRIM)
         st.session_state.ZN = st.number_input("Residential Land Zoned (%)", value=st.session_state.ZN)
         st.session_state.INDUS = st.number_input("Non-Retail Business Area (%)", value=st.session_state.INDUS)
-
         chas = st.selectbox("Located near Charles River?", ["No", "Yes"], index=st.session_state.CHAS)
         st.session_state.CHAS = 1 if chas == "Yes" else 0
-
         st.session_state.NOX = st.slider("Air Pollution (NOx concentration)", 0.0, 1.0, st.session_state.NOX)
         st.session_state.DIS = st.number_input("Distance to Employment Centers", value=st.session_state.DIS)
 
@@ -72,7 +77,6 @@ if selected == "Predictor":
         st.session_state.AGE = st.number_input("Old Houses (%) (built before 1940)", value=st.session_state.AGE)
         st.session_state.RAD = st.number_input("Highway Accessibility Index", value=st.session_state.RAD)
         st.session_state.TAX = st.number_input("Property Tax Rate", value=st.session_state.TAX)
-
         st.session_state.PTRATIO = st.number_input("Student-Teacher Ratio", value=st.session_state.PTRATIO)
         st.session_state.B = st.number_input("Population Diversity Index", value=st.session_state.B)
         st.session_state.LSTAT = st.slider("Lower Income Population (%)", 0.0, 40.0, st.session_state.LSTAT)
@@ -80,6 +84,7 @@ if selected == "Predictor":
     # -------------------------------
     # BUTTONS
     # -------------------------------
+
     c1, c2 = st.columns(2)
 
     if c1.button("🧹 Clear All"):
@@ -93,9 +98,9 @@ if selected == "Predictor":
     # -------------------------------
     # PREDICTION
     # -------------------------------
+
     try:
         pipeline = PredictPipeline()
-
         data = CustomData(
             st.session_state.CRIM,
             st.session_state.ZN,
@@ -114,7 +119,7 @@ if selected == "Predictor":
 
         df = data.get_data_as_dataframe()
 
-        # ✅ SAFE REINDEX FIX (deployment-safe)
+        # Deployment-safe reindex fix
         if hasattr(pipeline.preprocessor, "feature_names_in_"):
             df = df.reindex(
                 columns=pipeline.preprocessor.feature_names_in_,
@@ -127,8 +132,6 @@ if selected == "Predictor":
 
     except Exception as e:
         st.error("Prediction failed")
-        st.exception(e)
-
         if DEBUG:
             st.error(str(e))
             st.text(traceback.format_exc())
@@ -136,6 +139,7 @@ if selected == "Predictor":
 # -------------------------------
 # INSIGHTS
 # -------------------------------
+
 elif selected == "Insights":
 
     st.title("📊 Key Property Insights")
@@ -150,6 +154,7 @@ elif selected == "Insights":
     - **📍 Distance to Jobs → Mixed Impact**
 
     ### 🎯 Why this matters
+
     Helps users make **data-driven real estate decisions**.
     """)
 
@@ -158,6 +163,7 @@ elif selected == "Insights":
 # -------------------------------
 # ABOUT
 # -------------------------------
+
 else:
 
     st.title("👤 About Me")
@@ -168,19 +174,22 @@ else:
     Machine Learning enthusiast building real-world ML systems.
 
     ### 🚀 Project Highlights
+
     - End-to-end ML pipeline
     - Model + preprocessing integration
     - Streamlit deployment
 
     ### 💼 Skills
-    - ML (Scikit-learn)
-    - Deployment
-    - Data Processing
+
+    - ML (Scikit-learn, CatBoost, XGBoost)
+    - Deployment (Streamlit Cloud)
+    - Data Processing & Feature Engineering
     - UI Design
 
     ### 📬 Contact
+
     - Email: atharvasawant3183@gmail.com
-    - Phone: +91 9653320569
+    - GitHub: [AtharvaVSawant](https://github.com/AtharvaVSawant)
     """)
 
     st.success("✅ Portfolio-ready project")
@@ -188,5 +197,6 @@ else:
 # -------------------------------
 # FOOTER
 # -------------------------------
+
 st.markdown("---")
 st.caption("Smart Property Advisor | Built with Streamlit")
