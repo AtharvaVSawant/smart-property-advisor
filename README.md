@@ -7,11 +7,18 @@
 ![CatBoost](https://img.shields.io/badge/CatBoost-1.2.5-yellow)
 ![XGBoost](https://img.shields.io/badge/XGBoost-2.0.3-orange)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://smart-property-advisor.streamlit.app/)
 
 ---
 
-<!-- Replace the line below with your actual GIF once recorded -->
+<!-- Add your GIF here once recorded -->
 <!-- ![Demo](assets/demo.gif) -->
+
+---
+
+## 🌐 Live Demo
+
+🔗 **[https://smart-property-advisor.streamlit.app/](https://smart-property-advisor.streamlit.app/)**
 
 ---
 
@@ -132,6 +139,7 @@ streamlit run app.py
 **Atharva Sawant**
 📧 [atharvasawant3183@gmail.com](mailto:atharvasawant3183@gmail.com)
 🔗 [GitHub Profile](https://github.com/AtharvaVSawant)
+🌐 [Live App](https://smart-property-advisor.streamlit.app/)
 
 ---
 
