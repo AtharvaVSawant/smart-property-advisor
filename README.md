@@ -1,47 +1,27 @@
 # 🏠 Smart Property Advisor
 
-A machine learning-powered web application that predicts residential property prices based on key housing and neighborhood features. Built with an end-to-end ML pipeline and deployed via Streamlit.
+> An end-to-end Machine Learning web application that predicts residential property prices based on neighborhood and structural features — built with a production-style ML pipeline and deployed via Streamlit.
+
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?logo=streamlit)
+![CatBoost](https://img.shields.io/badge/CatBoost-1.2.5-yellow)
+![XGBoost](https://img.shields.io/badge/XGBoost-2.0.3-orange)
+![License](https://img.shields.io/badge/License-MIT-green)
 
 ---
 
-## 📌 Overview
-
-Smart Property Advisor uses a trained regression model on the classic Boston Housing dataset to estimate property prices. Users can interactively adjust feature values through sliders and input fields and get an instant price prediction, making it a practical tool for data-driven real estate decision-making.
-
----
-## 🌐 Live Demo
-
-👉 **Try the app here:** https://smart-property-advisor.streamlit.app/
+<!-- Replace the line below with your actual GIF once recorded -->
+<!-- ![Demo](assets/demo.gif) -->
 
 ---
 
-## 🚀 Features
+## 📌 Features
 
-- **Interactive Price Predictor** — Adjust 13 housing features in real time and get an estimated market value
-- **Key Insights Panel** — Understand which factors (rooms, crime rate, pollution, income levels) most influence prices
-- **Reset & Clear Controls** — Quickly reset all inputs to sensible defaults or clear them
-- **Clean Streamlit UI** — Multi-page navigation with sidebar menu (Predictor, Insights, About)
-- **End-to-End ML Pipeline** — Preprocessing and model inference bundled together via a `PredictPipeline` class
-
----
-
-## 🧠 Input Features
-
-| Feature | Description |
-|---|---|
-| `CRIM` | Per capita crime rate |
-| `ZN` | Proportion of residential land zoned (%) |
-| `INDUS` | Non-retail business area (%) |
-| `CHAS` | Adjacent to Charles River (0/1) |
-| `NOX` | Nitric oxide concentration (air pollution) |
-| `RM` | Average number of rooms per dwelling |
-| `AGE` | Proportion of units built before 1940 (%) |
-| `DIS` | Weighted distance to employment centers |
-| `RAD` | Highway accessibility index |
-| `TAX` | Property tax rate per $10,000 |
-| `PTRATIO` | Pupil-teacher ratio |
-| `B` | Population diversity index |
-| `LSTAT` | Lower income population (%) |
+- 🎯 Predicts property prices in real-time using a trained ML model
+- 🧪 Clean end-to-end pipeline: data ingestion → transformation → training → prediction
+- 📊 Insights page explaining key drivers of property prices
+- 🔄 Interactive sliders and inputs with Reset / Clear functionality
+- ✅ Deployment-safe preprocessing with dynamic feature reindexing
 
 ---
 
@@ -50,84 +30,111 @@ Smart Property Advisor uses a trained regression model on the classic Boston Hou
 ```
 smart-property-advisor/
 │
-├── app.py                  # Streamlit application entry point
-├── requirements.txt        # Python dependencies
-├── setup.py                # Package setup
-├── runtime.txt             # Python runtime version
-│
 ├── src/
-│   └── pipeline/
-│       └── predict_pipeline.py   # CustomData & PredictPipeline classes
+│   ├── pipeline/
+│   │   ├── predict_pipeline.py     # CustomData + PredictPipeline classes
+│   │   └── train_pipeline.py       # Training orchestration
+│   ├── components/
+│   │   ├── data_ingestion.py
+│   │   ├── data_transformation.py
+│   │   └── model_trainer.py
+│   ├── exception.py
+│   ├── logger.py
+│   └── utils.py
 │
-├── artifacts/              # Saved model and preprocessor files
-├── catboost_info/          # CatBoost training logs
-├── notebook/               # Jupyter notebooks for EDA & model training
-└── .github/workflows/      # CI/CD workflows
+├── notebook/                       # EDA and model training notebooks
+├── artifacts/                      # Saved model and preprocessor (auto-generated)
+├── app.py                          # Streamlit application entry point
+├── setup.py
+├── requirements.txt
+├── runtime.txt
+└── .github/workflows/              # CI/CD pipeline
 ```
 
 ---
 
-## ⚙️ Installation & Setup
+## 🚀 Getting Started
 
-### Prerequisites
-- Python 3.x
-
-### Steps
+### 1. Clone the repository
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/AtharvaVSawant/smart-property-advisor.git
 cd smart-property-advisor
+```
 
-# 2. Install dependencies
+### 2. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-# 3. Run the Streamlit app
+### 3. Train the model (first time only)
+
+```bash
+python src/pipeline/train_pipeline.py
+```
+
+This will generate the trained model and preprocessor inside the `artifacts/` folder.
+
+### 4. Run the app
+
+```bash
 streamlit run app.py
 ```
 
 ---
 
-## 📦 Tech Stack
+## 🧠 Input Features
 
-| Category | Tools |
+| Feature | Description |
 |---|---|
-| Frontend | Streamlit, streamlit-option-menu |
-| ML / Modeling | Scikit-learn, CatBoost, XGBoost |
-| Data Processing | NumPy, Pandas |
-| Visualization | Matplotlib, Seaborn, Plotly |
+| CRIM | Per-capita crime rate |
+| ZN | % of residential land zoned for large lots |
+| INDUS | % non-retail business acres |
+| CHAS | Located near Charles River (0/1) |
+| NOX | Nitric oxide concentration (air pollution) |
+| RM | Average number of rooms per dwelling |
+| AGE | % of homes built before 1940 |
+| DIS | Weighted distance to employment centres |
+| RAD | Highway accessibility index |
+| TAX | Property tax rate per $10,000 |
+| PTRATIO | Pupil-teacher ratio |
+| B | Population diversity index |
+| LSTAT | % lower-income population |
+
+---
+
+## 🤖 Model & Tech Stack
+
+| Component | Technology |
+|---|---|
+| Frontend | Streamlit |
+| ML Models | CatBoost, XGBoost, Scikit-learn |
+| Data Processing | Pandas, NumPy |
 | Serialization | Dill |
+| Visualization | Matplotlib, Seaborn, Plotly |
+| CI/CD | GitHub Actions |
 
 ---
 
-## 📊 Model Pipeline
+## 📊 Key Insights
 
-1. **Data Ingestion** — Load and split the Boston Housing dataset
-2. **Preprocessing** — Feature scaling and transformation using Scikit-learn pipelines
-3. **Model Training** — Multiple regressors evaluated; best model selected (CatBoost/XGBoost)
-4. **Artifact Saving** — Preprocessor and model serialized with `dill`
-5. **Prediction** — `PredictPipeline` loads artifacts and runs inference on new inputs
-
----
-
-## 💡 Key Insights
-
-- **More rooms → Higher price** — Room count is one of the strongest positive predictors
-- **Higher crime rate → Lower price** — Crime significantly depresses property value
-- **Air pollution → Negative impact** — NOx levels inversely affect prices
-- **Lower income population → Lower price** — LSTAT is a strong negative indicator
-- **Distance to jobs → Mixed impact** — Depends on transportation accessibility
+- **More rooms → Higher price** (strongest positive feature)
+- **Higher crime rate → Lower price**
+- **Air pollution (NOx) → Negative impact**
+- **Lower-income population % → Negative impact**
+- **Distance to employment → Mixed, non-linear effect**
 
 ---
 
-## 👤 Author
+## 📬 Contact
 
 **Atharva Sawant**
-- 📧 atharvasawant3183@gmail.com
-- 📞 +91 9653320569
+📧 [atharvasawant3183@gmail.com](mailto:atharvasawant3183@gmail.com)
+🔗 [GitHub Profile](https://github.com/AtharvaVSawant)
 
 ---
 
 ## 📄 License
 
-This project is open-source and available for portfolio and educational purposes.
+This project is licensed under the [MIT License](LICENSE).
